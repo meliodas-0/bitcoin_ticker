@@ -40,16 +40,17 @@ class _BitCoinState extends State<BitCoin> {
   }
 
   void setValues() async {
-    prices.clear();
+    setState(() {
+      prices.clear();
+    });
     for (String cryptocurrency in cryptoList.keys) {
-      String url = '$kUrl$cryptocurrency/$currency?apikey=$kApiKey';
+      String url = '$kUrl$cryptocurrency/$currency';
       dynamic jsonData = await NetworkStats.getStats(url);
 
       //print(url);
       if (jsonData != null) {
         jsonData = jsonDecode(jsonData);
         print(jsonData);
-        print(jsonData["rate"]);
         double cost = jsonData['rate'] + 0.0;
         String rate = cost.toStringAsFixed(2);
         setState(() {
@@ -90,6 +91,7 @@ class _BitCoinState extends State<BitCoin> {
         return false;
       },
       child: CupertinoPicker(
+        scrollController: FixedExtentScrollController(initialItem: 19),
         itemExtent: 32,
         onSelectedItemChanged: (value) {
           setState(() {
